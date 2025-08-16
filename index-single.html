@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AFOLINE — Built for Founders, Who Hate Limits</title>
+  <meta name="description" content="AFOLINE is a modern growth partner for founders. We build websites, run Meta & Google Ads, create UGC, manage social media, and automate growth." />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+/* AFOLINE Landing with 3D + Motion */
+:root{
+  --bg:#0B1221;
+  --panel:#0F1830;
+  --muted:#8B93A7;
+  --ink:#E6ECFF;
+  --brand:#2d8cff;
+  --brand-2:#1c6dd9;
+  --border:rgba(255,255,255,0.08);
+  --success:#22c55e;
+  --radius:14px;
+  --shadow:0 10px 30px rgba(0,0,0,0.35);
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Helvetica Neue", sans-serif;
+  background: var(--bg);
+  color:var(--ink);
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  perspective:1000px;
+  overflow-x:hidden;
+}
+
+#bg-canvas{
+  position:fixed; inset:0; z-index:-1;
+  display:block; width:100%; height:100%;
+  background: radial-gradient(1200px 800px at 70% -10%, rgba(45,140,255,0.15), transparent 60%);
+  filter:saturate(120%) blur(0.3px);
+}
+
+a{color:var(--ink); text-decoration:none}
+a:hover{color:#fff}
+
+.container{width:min(1120px, 92vw); margin-inline:auto;}
+
+.skip-link{position:absolute; left:-9999px;}
+.skip-link:focus{left:16px; top:8px; background:#000; color:#fff; padding:8px 12px; border-radius:8px;}
+
+.site-header{
+  position:sticky; top:0; z-index:20;
+  backdrop-filter: saturate(160%) blur(8px);
+  background: linear-gradient(180deg, rgba(11,18,33,.88), rgba(11,18,33,.55));
+  border-bottom:1px solid var(--border);
+}
+.header-inner{display:flex; align-items:center; justify-content:space-between; padding:14px 0;}
+.brand{display:flex; align-items:center; gap:12px; font-weight:700}
+.brand-name{letter-spacing:.5px}
+
+/* 3D Cube Logo */
+.cube{
+  --size:28px;
+  width:var(--size); height:var(--size);
+  position:relative; transform-style:preserve-3d;
+  animation: spin 12s linear infinite;
+  filter:drop-shadow(0 6px 18px rgba(45,140,255,.35));
+}
+.cube.sm{ --size:22px; }
+.cube .face{
+  position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  background:linear-gradient(180deg, var(--brand), var(--brand-2));
+  color:white; font-weight:800;
+  border:1px solid rgba(255,255,255,.15); border-radius:6px;
+}
+/* position faces */
+.cube .f1{ transform: translateZ(calc(var(--size)/2)); }      /* front */
+.cube .f2{ transform: rotateY(90deg) translateZ(calc(var(--size)/2)); }  /* right */
+.cube .f3{ transform: rotateY(180deg) translateZ(calc(var(--size)/2)); } /* back */
+.cube .f4{ transform: rotateY(-90deg) translateZ(calc(var(--size)/2)); } /* left */
+.cube .f5{ transform: rotateX(90deg) translateZ(calc(var(--size)/2)); }  /* top */
+.cube .f6{ transform: rotateX(-90deg) translateZ(calc(var(--size)/2)); } /* bottom */
+@keyframes spin{
+  from{ transform: rotateX(0deg) rotateY(0deg); }
+  to{ transform: rotateX(360deg) rotateY(360deg); }
+}
+
+.nav-toggle{display:none; background:none; border:0; cursor:pointer;}
+.nav-toggle .bar{width:22px; height:2px; background:var(--ink); margin:4px 0; border-radius:2px}
+
+.menu{display:flex; gap:18px; align-items:center; list-style:none; margin:0; padding:0;}
+.menu a{padding:10px 12px; border-radius:10px;}
+.menu .btn{padding:10px 14px;}
+
+.btn{
+  display:inline-flex; align-items:center; justify-content:center;
+  padding:12px 18px; border-radius:12px; font-weight:600;
+  background:linear-gradient(180deg, var(--brand), var(--brand-2));
+  color:#fff; border:1px solid rgba(255,255,255,.08); box-shadow:var(--shadow);
+  transform: translateZ(0);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.btn:hover{transform:translateY(-1px) translateZ(0);}
+.btn--ghost{background:transparent; border:1px solid var(--border); box-shadow:none;}
+.btn--xl{padding:14px 22px; font-size:1.05rem}
+.btn--block{display:flex; width:100%;}
+
+.hero{padding:76px 0 24px; position:relative;}
+.hero-grid{display:grid; grid-template-columns:1.1fr .9fr; gap:32px; align-items:center;}
+.hero h1{font-size: clamp(2.2rem, 4vw, 3.2rem); line-height:1.1; margin:0 0 12px}
+.sub{color:var(--muted); font-size:1.1rem; margin:0 0 24px}
+.cta-row{display:flex; gap:12px; flex-wrap:wrap}
+.trust{display:flex; gap:24px; margin-top:18px; color:var(--muted); font-size:.95rem}
+.trust .kpi{color:#fff; font-weight:800; font-size:1.1rem; margin-right:6px}
+
+/* Tilt cards */
+.hero-art{display:flex; align-items:center; justify-content:center;}
+.card-stack{display:grid; gap:14px; width:min(480px, 92%); transform-style:preserve-3d;}
+.card{
+  background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+  border:1px solid var(--border); border-radius:16px; padding:18px;
+  box-shadow:0 10px 30px rgba(0,0,0,.25);
+  transform: translateZ(0);
+  transition: transform .12s ease, box-shadow .12s ease;
+  will-change: transform;
+}
+.card h3{margin:0 0 6px; font-size:1.05rem}
+.tilt:hover{box-shadow:0 18px 50px rgba(0,0,0,.35)}
+
+.glassbar{
+  margin-top:34px; border-top:1px solid var(--border);
+  background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+}
+.marquee{display:grid; grid-auto-flow:column; gap:36px; padding:12px 0; white-space:nowrap; overflow:auto; scrollbar-width:none}
+.marquee::-webkit-scrollbar{display:none}
+
+.section-head{text-align:center; margin:64px 0 28px}
+.section-head h2{margin:0 0 8px; font-size: clamp(1.6rem, 3vw, 2.2rem)}
+.section-head p{margin:0; color:var(--muted)}
+
+.clients .logo-row{display:grid; grid-template-columns:repeat(6,1fr); gap:12px}
+.logo{background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02)); border:1px solid var(--border); border-radius:12px; padding:18px; text-align:center; color:var(--muted)}
+
+.services .grid3,
+.work .grid3,
+.pricing .grid3{display:grid; grid-template-columns:repeat(3,1fr); gap:18px}
+
+.tile{
+  background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+  border:1px solid var(--border); border-radius:var(--radius); padding:20px;
+  transform: translateY(10px);
+}
+
+.work .cards .case{
+  padding:20px; border:1px solid var(--border); border-radius:var(--radius);
+  background:radial-gradient(260px 200px at 20% -10%, rgba(45,140,255,.18), transparent 60%), linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+}
+
+.price{
+  background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+  border:1px solid var(--border); border-radius:var(--radius); padding:22px; position:relative;
+}
+
+.price--popular{transform:translateY(-3px); box-shadow:var(--shadow)}
+
+.faq .accordion details{
+  background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+  border:1px solid var(--border); border-radius:12px; padding:14px 18px; margin:10px 0;
+}
+.faq summary{cursor:pointer; font-weight:600}
+.faq p{margin:10px 0 0; color:var(--muted)}
+
+.contact{padding:20px 0 64px}
+.contact-grid{display:grid; grid-template-columns:1fr 1fr; gap:24px; align-items:start}
+.contact-list{list-style:none; padding:0; margin:12px 0 0; color:var(--muted)}
+.contact-form{
+  background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+  border:1px solid var(--border); border-radius:var(--radius); padding:20px;
+}
+.contact-form label{display:block; margin:10px 0}
+.contact-form span{display:block; font-size:.9rem; color:var(--muted); margin:0 0 6px}
+.contact-form input, .contact-form textarea{
+  width:100%; padding:12px 14px; border-radius:10px; border:1px solid var(--border);
+  background:rgba(255,255,255,.02); color:#fff; outline:none;
+}
+.contact-form input:focus, .contact-form textarea:focus{border-color:rgba(45,140,255,.6)}
+
+.site-footer{border-top:1px solid var(--border); padding:24px 0 10px; background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01))}
+.footer-grid{display:grid; grid-template-columns:1.6fr 1fr 1fr; gap:18px}
+.muted{color:var(--muted)}
+.clean{list-style:none; padding:0; margin:0}
+.fineprint{border-top:1px solid var(--border); margin-top:14px; padding-top:12px; color:var(--muted); text-align:center}
+
+/* Scroll reveal base */
+.reveal{opacity:0; transform: translateY(24px);}
+.reveal.show{opacity:1; transform:none; transition:opacity .6s ease, transform .6s ease;}
+
+/* Responsive */
+@media (max-width: 900px){
+  .hero-grid{grid-template-columns:1fr; text-align:center}
+  .trust{justify-content:center}
+  .clients .logo-row{grid-template-columns:repeat(3,1fr)}
+  .services .grid3, .work .grid3, .pricing .grid3{grid-template-columns:1fr}
+  .contact-grid{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr; text-align:center}
+  .nav-toggle{display:block}
+  .menu{position:absolute; right:16px; top:62px; flex-direction:column; align-items:stretch; background:var(--panel); padding:10px; border:1px solid var(--border); border-radius:12px; display:none; width:min(92vw, 340px)}
+  .menu.show{display:flex}
+  .menu .btn{width:100%}
+}
+
+/* Motion safety */
+@media (prefers-reduced-motion: reduce){
+  .cube{animation:none}
+  .reveal{transition:none}
+  .btn:hover{transform:none}
+}
+
+</style>
+  <link rel="icon" href="data:image/png;base64,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" />
+  <meta name="theme-color" content="#0B1221" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- Animated gradient canvas -->
+  <canvas id="bg-canvas" aria-hidden="true"></canvas>
+
+  <header class="site-header" data-transparent>
+    <div class="container header-inner">
+      <a href="#" class="brand">
+        <!-- 3D Cube Logo -->
+        <div class="cube" aria-hidden="true">
+          <div class="face f1">A</div>
+          <div class="face f2">F</div>
+          <div class="face f3">O</div>
+          <div class="face f4">L</div>
+          <div class="face f5">I</div>
+          <div class="face f6">N</div>
+        </div>
+        <span class="brand-name">AFOLINE</span>
+      </a>
+
+      <nav class="nav" aria-label="Primary">
+        <button class="nav-toggle" aria-controls="menu" aria-expanded="false">
+          <span class="sr-only">Toggle menu</span>
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+        </button>
+        <ul id="menu" class="menu">
+          <li><a href="#services">Services</a></li>
+          <li><a href="#work">Work</a></li>
+          <li><a href="#pricing">Pricing</a></li>
+          <li><a href="#faq">FAQ</a></li>
+          <li><a href="#contact" class="btn btn--ghost">Contact</a></li>
+          <li><a href="https://wa.me/919904870304?text=Hi%20AFOLINE%2C%20I%20want%20growth!" class="btn">WhatsApp</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- HERO -->
+    <section class="hero reveal">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <h1>Built for Founders, Who Hate Limits</h1>
+          <p class="sub">Your idea + our execution = unstoppable digital growth.</p>
+          <div class="cta-row">
+            <a href="#contact" class="btn btn--xl">Get a Free Growth Plan</a>
+            <a href="#work" class="btn btn--ghost btn--xl">See our Work</a>
+          </div>
+          <div class="trust">
+            <div class="trust-item"><span class="kpi">50+</span> projects shipped</div>
+            <div class="trust-item"><span class="kpi">₹3Cr+</span> ad spend managed</div>
+            <div class="trust-item"><span class="kpi">7+</span> industries served</div>
+          </div>
+        </div>
+
+        <!-- Tilt / Parallax Cards -->
+        <div class="hero-art" id="tilt-area">
+          <div class="card-stack">
+            <div class="card tilt">
+              <h3>Meta Ads — Awareness</h3>
+              <p>AI-suggested placements (Reels + Stories), creative hooks, and live optimizations.</p>
+            </div>
+            <div class="card tilt">
+              <h3>UGC + Reels</h3>
+              <p>High-retention scripts + native edits that spark saves & shares.</p>
+            </div>
+            <div class="card tilt">
+              <h3>Websites that Convert</h3>
+              <p>Lightning-fast, SEO-friendly pages with modern UX.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="glassbar">
+        <div class="container marquee">
+          <span>Websites</span><span>Meta Ads</span><span>Google Ads</span><span>UGC</span><span>Social Media</span><span>WhatsApp API</span><span>GMB Reviews</span><span>AI Automations</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- CLIENTS -->
+    <section class="clients reveal">
+      <div class="container">
+        <div class="section-head">
+          <h2>Trusted by brands you know</h2>
+          <p>Hotels, restaurants, fashion, clinics, e‑commerce & more.</p>
+        </div>
+        <div class="logo-row" aria-label="Client logos">
+          <div class="logo"><span>Hotel Moon Light</span></div>
+          <div class="logo"><span>Greenees Cafe</span></div>
+          <div class="logo"><span>ZEROIC</span></div>
+          <div class="logo"><span>Rumi Wedding House</span></div>
+          <div class="logo"><span>Trendy Trail</span></div>
+          <div class="logo"><span>Unique Wallpaper</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SERVICES -->
+    <section id="services" class="services reveal">
+      <div class="container">
+        <div class="section-head">
+          <h2>Everything you need to grow</h2>
+          <p>Pick one service or get an end‑to‑end growth stack.</p>
+        </div>
+
+        <div class="grid3">
+          <article class="tile">
+            <h3>Website Development</h3>
+            <p>Next‑gen landing pages & Shopify storefronts. Fast, SEO‑ready, conversion‑focused.</p>
+            <ul class="check">
+              <li>Modern UI (white / dark‑blue / #2d8cff)</li>
+              <li>Speed & Core Web Vitals</li>
+              <li>cPanel friendly deployment</li>
+            </ul>
+          </article>
+
+          <article class="tile">
+            <h3>Meta & Google Ads</h3>
+            <p>Full‑funnel campaigns with AI suggestions, retargeting, and custom metrics (Hook Rate, CPMP, VCR).</p>
+            <ul class="check">
+              <li>Reels + Stories by default for Awareness</li>
+              <li>Smart budgets & performance goals</li>
+              <li>Live cost alerts via WhatsApp</li>
+            </ul>
+          </article>
+
+          <article class="tile">
+            <h3>UGC + Social Media</h3>
+            <p>Scripted UGC, reels, and daily posting calendars with analytics and A/B testing.</p>
+            <ul class="check">
+              <li>Native, platform‑first creatives</li>
+              <li>AI caption & hashtag engine</li>
+              <li>Post scheduler & templates</li>
+            </ul>
+          </article>
+
+          <article class="tile">
+            <h3>WhatsApp & GMB</h3>
+            <p>Lead forms, drip replies, smart auto‑responses, and AI review generation with sentiment handling.</p>
+            <ul class="check">
+              <li>Cloud API setup & flows</li>
+              <li>Auto‑reply for reviews</li>
+              <li>Multi‑location support</li>
+            </ul>
+          </article>
+
+          <article class="tile">
+            <h3>Analytics & AI</h3>
+            <p>Custom dashboards, anomaly alerts, and GPT‑powered insights to fix bottlenecks fast.</p>
+            <ul class="check">
+              <li>KPI tracking & export</li>
+              <li>Predictive suggestions</li>
+              <li>Weekly action plans</li>
+            </ul>
+          </article>
+
+          <article class="tile">
+            <h3>Consulting</h3>
+            <p>Positioning, offer design, and go‑to‑market sprints for India & international expansion.</p>
+            <ul class="check">
+              <li>ICP & messaging</li>
+              <li>Outbound frameworks</li>
+              <li>Creator partnerships</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- WORK -->
+    <section id="work" class="work reveal">
+      <div class="container">
+        <div class="section-head">
+          <h2>Featured Work</h2>
+          <p>Real results from real businesses.</p>
+        </div>
+        <div class="grid3 cards">
+          <article class="case">
+            <div class="badge">Hospitality</div>
+            <h3>Hotel Moon Light</h3>
+            <p>Revamped brand + performance Reels. 3.1x more bookings within 30 days.</p>
+          </article>
+          <article class="case">
+            <div class="badge">Fashion</div>
+            <h3>Filozero</h3>
+            <p>WhatsApp lead engine + retargeting. CAC reduced by 34% MoM.</p>
+          </article>
+          <article class="case">
+            <div class="badge">F&B</div>
+            <h3>Greenees Cafe</h3>
+            <p>UGC + influencer nights. 2.4x footfall on weekends.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIDEO -->
+    <section class="video reveal">
+      <div class="container">
+        <div class="section-head">
+          <h2>See how we work</h2>
+          <p>3‑minute walkthrough of our growth process.</p>
+        </div>
+        <div class="video-embed">
+          <iframe title="AFOLINE Walkthrough" src="https://www.youtube.com/embed/dQw4w9WgXcQ" loading="lazy" allowfullscreen></iframe>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRICING -->
+    <section id="pricing" class="pricing reveal">
+      <div class="container">
+        <div class="section-head">
+          <h2>Simple, transparent pricing</h2>
+          <p>Start small, scale fast. Switch plans any time.</p>
+        </div>
+        <div class="grid3 cards">
+          <article class="price">
+            <h3>Starter</h3>
+            <div class="amount"><span class="cur">₹</span>14,999<span class="per">/mo</span></div>
+            <ul class="check">
+              <li>1 landing page</li>
+              <li>10 creatives/mo</li>
+              <li>Meta ads setup</li>
+              <li>Basic analytics</li>
+            </ul>
+            <a href="#contact" class="btn btn--block">Get Starter</a>
+          </article>
+          <article class="price price--popular">
+            <div class="badge">Most Popular</div>
+            <h3>Growth</h3>
+            <div class="amount"><span class="cur">₹</span>29,999<span class="per">/mo</span></div>
+            <ul class="check">
+              <li>Full site (up to 5 pages)</li>
+              <li>20 creatives + 8 reels/mo</li>
+              <li>Meta + Google ads</li>
+              <li>Advanced analytics + alerts</li>
+            </ul>
+            <a href="#contact" class="btn btn--block">Choose Growth</a>
+          </article>
+          <article class="price">
+            <h3>Pro</h3>
+            <div class="amount"><span class="cur">₹</span>59,999<span class="per">/mo</span></div>
+            <ul class="check">
+              <li>Everything in Growth</li>
+              <li>UGC shoots + influencers</li>
+              <li>WhatsApp & GMB automation</li>
+              <li>Priority support</li>
+            </ul>
+            <a href="#contact" class="btn btn--block">Go Pro</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="faq reveal">
+      <div class="container">
+        <div class="section-head">
+          <h2>Frequently asked</h2>
+          <p>Answers to common questions from founders.</p>
+        </div>
+        <div class="accordion" role="tablist">
+          <details>
+            <summary>How fast can we launch?</summary>
+            <p>Typical landing pages go live in 5–7 working days once content is final. Full sites depend on scope.</p>
+          </details>
+          <details>
+            <summary>Do you manage ads end‑to‑end?</summary>
+            <p>Yes. Strategy, creatives, setup, optimization, and reporting. We also set cost alerts so spend never surprises you.</p>
+          </details>
+          <details>
+            <summary>What industries do you serve?</summary>
+            <p>Hospitality, fashion, clinics, e‑commerce, and local services — across India & international markets.</p>
+          </details>
+          <details>
+            <summary>Can you work on cPanel hosting?</summary>
+            <p>Absolutely. We provide a deploy‑ready build and documentation tailored for cPanel.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="contact reveal">
+      <div class="container contact-grid">
+        <div class="contact-copy">
+          <h2>Let’s build your growth system</h2>
+          <p>Tell us about your goals and we’ll send a custom plan within 24 hours.</p>
+          <ul class="contact-list">
+            <li><strong>Email:</strong> <a href="mailto:afolineofficial@gmail.com">afolineofficial@gmail.com</a></li>
+            <li><strong>Phone/WhatsApp:</strong> <a href="https://wa.me/919904870304">+91 9904870304</a></li>
+            <li><strong>HQ:</strong> Surat, Gujarat</li>
+          </ul>
+        </div>
+        <form class="contact-form" onsubmit="event.preventDefault(); window.location.href='https://wa.me/919904870304?text='+encodeURIComponent('Hi AFOLINE, I want a growth plan for my business.');">
+          <label>
+            <span>Your name</span>
+            <input required type="text" placeholder="Vishvam Savaliya" />
+          </label>
+          <label>
+            <span>Email</span>
+            <input required type="email" placeholder="you@company.com" />
+          </label>
+          <label>
+            <span>Business / Industry</span>
+            <input required type="text" placeholder="Hotel / Fashion / Clinic / E‑com..." />
+          </label>
+          <label>
+            <span>What do you need?</span>
+            <textarea rows="4" placeholder="Website, ads, UGC, WhatsApp automation..."></textarea>
+          </label>
+          <button class="btn btn--block btn--xl" type="submit">Get My Plan</button>
+          <p class="privacy">By submitting, you agree to our <a href="#">Terms</a> and <a href="#">Privacy</a>.</p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div>
+        <a href="#" class="brand">
+          <div class="cube sm" aria-hidden="true">
+            <div class="face f1">A</div><div class="face f2">F</div><div class="face f3">O</div>
+            <div class="face f4">L</div><div class="face f5">I</div><div class="face f6">N</div>
+          </div>
+          <span class="brand-name">AFOLINE</span>
+        </a>
+        <p class="muted">Growth partner for ambitious founders. Websites, ads, UGC, and automation — built to scale.</p>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <ul class="clean">
+          <li><a href="#work">Work</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#pricing">Pricing</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul class="clean">
+          <li><a href="mailto:afolineofficial@gmail.com">afolineofficial@gmail.com</a></li>
+          <li><a href="https://wa.me/919904870304">+91 9904870304</a></li>
+          <li>Surat, Gujarat</li>
+        </ul>
+      </div>
+    </div>
+    <div class="container fineprint">
+      <p>© <span id="year"></span> AFOLINE. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+// Motion & 3D interactions (no external libs)
+const $ = (s, r=document)=>r.querySelector(s);
+const $$ = (s, r=document)=>Array.from(r.querySelectorAll(s));
+
+// Mobile nav
+const toggle = $('.nav-toggle');
+const menu = $('#menu');
+if(toggle){
+  toggle.addEventListener('click', () => {
+    const open = menu.classList.toggle('show');
+    toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+}
+
+// Smooth scroll
+$$('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const id = a.getAttribute('href');
+    if(id.length > 1){
+      const el = $(id);
+      if(el){
+        e.preventDefault();
+        el.scrollIntoView({behavior:'smooth', block:'start'});
+        menu?.classList.remove('show');
+      }
+    }
+  });
+});
+
+// Footer year
+$('#year').textContent = new Date().getFullYear();
+
+// Canvas animated gradient background
+(function(){
+  const c = document.getElementById('bg-canvas');
+  const ctx = c.getContext('2d');
+  let w, h, t=0, pr = window.devicePixelRatio || 1;
+  function resize(){
+    w = c.width = Math.floor(innerWidth * pr);
+    h = c.height = Math.floor(innerHeight * pr);
+    c.style.width = innerWidth + 'px';
+    c.style.height = innerHeight + 'px';
+  }
+  resize();
+  window.addEventListener('resize', resize, {passive:true});
+
+  function draw(){
+    t+=0.004;
+    // three moving radial gradients blended
+    ctx.clearRect(0,0,w,h);
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.fillStyle = '#0B1221';
+    ctx.fillRect(0,0,w,h);
+
+    function blob(cx, cy, r, c1, c2){
+      const grd = ctx.createRadialGradient(cx, cy, 0, cx, cy, r);
+      grd.addColorStop(0, c1);
+      grd.addColorStop(1, c2);
+      ctx.globalCompositeOperation = 'lighter';
+      ctx.fillStyle = grd;
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, 0, Math.PI*2);
+      ctx.fill();
+    }
+    const cx1 = w*0.7 + Math.sin(t*1.3)*w*0.06;
+    const cy1 = h*0.2 + Math.cos(t*1.1)*h*0.04;
+    const cx2 = w*0.3 + Math.cos(t*1.2)*w*0.05;
+    const cy2 = h*0.8 + Math.sin(t*1.5)*h*0.06;
+    const cx3 = w*0.5 + Math.sin(t*0.8)*w*0.04;
+    const cy3 = h*0.5 + Math.cos(t*0.9)*h*0.05;
+
+    blob(cx1, cy1, Math.min(w,h)*0.45, 'rgba(45,140,255,0.22)', 'rgba(45,140,255,0.0)');
+    blob(cx2, cy2, Math.min(w,h)*0.38, 'rgba(28,109,217,0.18)', 'rgba(28,109,217,0.0)');
+    blob(cx3, cy3, Math.min(w,h)*0.34, 'rgba(149,114,252,0.14)', 'rgba(149,114,252,0.0)');
+
+    requestAnimationFrame(draw);
+  }
+  const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+  if(!mq.matches) requestAnimationFrame(draw);
+})();
+
+// Tilt / parallax cards
+(function(){
+  const area = $('#tilt-area');
+  const cards = $$('.tilt');
+  if(!area || !cards.length) return;
+  let rect = area.getBoundingClientRect();
+  function onMove(e){
+    const x = (e.clientX - rect.left) / rect.width;
+    const y = (e.clientY - rect.top) / rect.height;
+    const rotateY = (x - 0.5) * 10;
+    const rotateX = (0.5 - y) * 10;
+    cards.forEach((card, i) => {
+      const depth = (i+1) * 8;
+      card.style.transform = `translateZ(${depth}px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    });
+  }
+  function onLeave(){
+    cards.forEach((card, i) => {
+      const depth = (i+1) * 8;
+      card.style.transform = `translateZ(${depth}px) rotateX(0) rotateY(0)`;
+    });
+  }
+  onLeave();
+  window.addEventListener('resize', ()=>{ rect = area.getBoundingClientRect(); }, {passive:true});
+  area.addEventListener('mousemove', onMove);
+  area.addEventListener('mouseleave', onLeave);
+})();
+
+// Scroll reveal
+(function(){
+  const els = $$('.reveal');
+  if(!('IntersectionObserver' in window)){ els.forEach(el=>el.classList.add('show')); return; }
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach((en)=>{
+      if(en.isIntersecting){
+        en.target.classList.add('show');
+        io.unobserve(en.target);
+      }
+    });
+  }, {threshold:0.12});
+  els.forEach(el=>io.observe(el));
+})();
+
+</script>
+</body>
+</html>
